@@ -8,7 +8,7 @@ def auth_required(func):
     """Декоратор проверяет что передан токен и он валидный"""
 
     def wrapper(*args, **kwargs):
-        token = request.headers.environ.get("HTTP_AUTHORIZATION").replace("Bearer", "")
+        token = request.headers.environ.get("HTTP_AUTHORIZATION").replace("Bearer ", "")
 
         if not token:
             raise Exception
@@ -16,7 +16,7 @@ def auth_required(func):
         try:
             jwt.decode(token,
                        key=current_app.config["SECRET_KEY"],
-                       algorithms=current_app.config["ALGORITHM"])
+                       algorithm=current_app.config["ALGORITHM"])
             return func(*args, **kwargs)
         except Exception:
             raise Exception
@@ -28,7 +28,7 @@ def admin_required(func):
     """Декоратор проверяет роль админа у пользователя"""
 
     def wrapper(*args, **kwargs):
-        token = request.headers.environ.get("HTTP_AUTHORIZATION").replace("Bearer", "")
+        token = request.headers.environ.get("HTTP_AUTHORIZATION").replace("Bearer ", "")
 
         if not token:
             raise Exception
@@ -36,7 +36,7 @@ def admin_required(func):
         try:
             data = jwt.decode(token,
                               key=current_app.config["SECRET_KEY"],
-                              algorithms=current_app.config["ALGORITHM"])
+                              algorithm=current_app.config["ALGORITHM"])
             if user_service.get_by_username_service(data["username"]).role == "admin":
                 return func(*args, **kwargs)
             else:

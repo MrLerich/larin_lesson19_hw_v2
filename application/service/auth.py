@@ -43,13 +43,13 @@ def generate_token(username, password_hash, password, is_refresh=False):
     data["exp"] = calendar.timegm(min30.timetuple())
     access_token = jwt.encode(data,
                               key=current_app.config["SECRET_KEY"],
-                              algorithms=current_app.config["ALGORITHM"])
+                              algorithm=current_app.config["ALGORITHM"])
     # day for refresh_token
     min_day = datetime.datetime.utcnow() + datetime.timedelta(minutes=current_app.config["TOKEN_EXPIRE_DAY"])
     data["exp"] = calendar.timegm(min_day.timetuple())
     refresh_token = jwt.encode(data,
                                key=current_app.config["SECRET_KEY"],
-                               algorithms=current_app.config["ALGORITHM"])
+                               algorithm=current_app.config["ALGORITHM"])
 
     return {
         "access_token": access_token,
@@ -60,7 +60,7 @@ def generate_token(username, password_hash, password, is_refresh=False):
 def approve_token(token):
     data = jwt.decode(token,
                       key=current_app.config["SECRET_KEY"],
-                      algorithms=current_app.config["ALGORITHM"])
+                      algorithm=current_app.config["ALGORITHM"])
 
     username = data.get("username")
     password = data.get("password")
