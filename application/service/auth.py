@@ -60,7 +60,7 @@ def generate_token(username, password_hash, password, is_refresh=False):
 def approve_token(token):
     data = jwt.decode(token,
                       key=current_app.config["SECRET_KEY"],
-                      algorithm=current_app.config["ALGORITHM"])
+                      algorithms=current_app.config["ALGORITHM"])
 
     username = data.get("username")
     password = data.get("password")

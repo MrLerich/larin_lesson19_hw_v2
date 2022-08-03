@@ -16,7 +16,7 @@ def auth_required(func):
         try:
             jwt.decode(token,
                        key=current_app.config["SECRET_KEY"],
-                       algorithm=current_app.config["ALGORITHM"])
+                       algorithms=current_app.config["ALGORITHM"])
             return func(*args, **kwargs)
         except Exception:
             raise Exception
@@ -36,7 +36,7 @@ def admin_required(func):
         try:
             data = jwt.decode(token,
                               key=current_app.config["SECRET_KEY"],
-                              algorithm=current_app.config["ALGORITHM"])
+                              algorithms=current_app.config["ALGORITHM"])
             if user_service.get_by_username_service(data["username"]).role == "admin":
                 return func(*args, **kwargs)
             else:
